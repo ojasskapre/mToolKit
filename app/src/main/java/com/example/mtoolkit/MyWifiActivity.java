@@ -29,7 +29,35 @@ public class MyWifiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_wifi);
-        getMyWifiDetails();
+        if (getNetworkClass(getApplicationContext()).equals("WIFI")) {
+            getMyWifiDetails();
+        }else if(getNetworkClass(getApplicationContext()).equals("-")) {
+            notConnected();
+        }else{
+            mobileNetworkConnected();
+        }
+    }
+
+    private void notConnected() {
+        mMyWifiNameText = findViewById(R.id.my_wifi_name);
+        mMyWifiNameText.setText("Not Connected");
+
+        mMyWifiDetailsText = findViewById(R.id.my_wifi_details);
+        mMyWifiDetailsText.setText("N.A.");
+
+        mMyWifiDHCPText = findViewById(R.id.my_wifi_dhcp_details);
+        mMyWifiDHCPText.setText("N.A.");
+    }
+
+    private void mobileNetworkConnected() {
+        mMyWifiNameText = findViewById(R.id.my_wifi_name);
+        mMyWifiNameText.setText("Connected to mobile data");
+
+        mMyWifiDetailsText = findViewById(R.id.my_wifi_details);
+        mMyWifiDetailsText.setText(getNetworkClass(getApplicationContext()));
+
+        mMyWifiDHCPText = findViewById(R.id.my_wifi_dhcp_details);
+        mMyWifiDHCPText.setText("N.A.");
     }
 
     @SuppressLint({"HardwareIds", "SetTextI18n"})
@@ -58,8 +86,8 @@ public class MyWifiActivity extends AppCompatActivity {
         detail.append("\nMAC ADDRESS:\t").append(mWifiInfo.getMacAddress().toUpperCase());
         detail.append("\nLINK SPEED:\t").append(mWifiInfo.getLinkSpeed());
         detail.append("\nFREQUENCY:\t").append(mWifiInfo.getFrequency());
-        int level = WifiManager.calculateSignalLevel(mWifiInfo.getRssi(), 5);
-        detail.append("\nSIGNAL STRENGTH:\t").append(level * 20).append("\n");
+        int level = WifiManager.calculateSignalLevel(mWifiInfo.getRssi(), 100);
+        detail.append("\nSIGNAL STRENGTH:\t").append(level).append(" %   (").append(mWifiInfo.getRssi()).append(" dBm )\n");
 
 
         mMyWifiDetailsText = findViewById(R.id.my_wifi_details);
@@ -128,7 +156,7 @@ public class MyWifiActivity extends AppCompatActivity {
                 case TelephonyManager.NETWORK_TYPE_LTE:    //api<11 : replace by 13
                 case TelephonyManager.NETWORK_TYPE_IWLAN:  //api<25 : replace by 18
                 case 19:  //LTE_CA
-                    return "4G";
+                    return "4G LTE";
                 default:
                     return "?";
             }

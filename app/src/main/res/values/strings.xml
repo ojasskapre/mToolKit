@@ -6,4 +6,5 @@
     <string name="share">SHARE</string>
     <string name="refresh">REFRESH</string>
     <string name="nearby_networks">Nearby Networks</string>
+    <string name="saved_networks">Saved Networks</string>
 </resources>

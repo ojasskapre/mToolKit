@@ -1,6 +1,9 @@
 package com.example.mtoolkit;
 
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,34 +12,33 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class AllWifiActivity extends AppCompatActivity {
+public class SavedWifiActivity extends AppCompatActivity {
     WifiManager mWifiManager;
-    List<ScanResult> mScanResultList;
+    List<WifiConfiguration> mScanResultList;
     StringBuilder detail;
     LinearLayout mLinearLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_wifi);
-        getAllWifiResult();
+        setContentView(R.layout.activity_saved_wifi);
+        getSavedNetworks();
     }
 
-    private void getAllWifiResult() {
+    private void getSavedNetworks() {
         mWifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        mLinearLayout = findViewById(R.id.linearLayout);
-        mScanResultList = mWifiManager.getScanResults();
-        TextView mNuberWifiText = findViewById(R.id.number_wifi);
-        mNuberWifiText.setText("Number of networks available: " + mScanResultList.size());
+        mScanResultList = mWifiManager.getConfiguredNetworks();
+
+        mLinearLayout = findViewById(R.id.savedLinearLayout);
+        TextView mNuberWifiText = findViewById(R.id.number_saved_wifi);
+        mNuberWifiText.setText("Number of saved networks: " + mScanResultList.size());
         for (int itr = 0; itr < mScanResultList.size(); itr++) {
             detail = new StringBuilder();
             detail.append("\n");
+            detail.append("NETWORK ID:\t").append(mScanResultList.get(itr).networkId).append("\n");
             detail.append("SSID:\t").append(mScanResultList.get(itr).SSID).append("\n");
-            detail.append("BSSID:\t").append(mScanResultList.get(itr).BSSID).append("\n");
-            detail.append("CAPABILITIES:\t").append(mScanResultList.get(itr).capabilities).append("\n");
-            int level = WifiManager.calculateSignalLevel(mScanResultList.get(itr).level, 100);
-            detail.append("SIGNAL LEVEL:\t").append(level).append(" %    (").append(mScanResultList.get(itr).level).append(" dBm )\n");
-            detail.append("FREQUENCY:\t").append(mScanResultList.get(itr).frequency).append("\n");
-            detail.append("DESCRIBE CONTENTS:\t").append(mScanResultList.get(itr).describeContents()).append("\n");
+            detail.append("Allowed Protocols:\t").append(mScanResultList.get(itr).allowedProtocols).append("\n");
+            detail.append("STATUS:\t").append(mScanResultList.get(itr).status).append("\n");
 
             TextView mDetailsText = new TextView(getApplicationContext());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -45,8 +47,10 @@ public class AllWifiActivity extends AppCompatActivity {
             mDetailsText.setTextSize(16);
             mDetailsText.setPadding(20, 0, 0, 0);
             mDetailsText.setBackgroundResource(R.color.coloTextView);
+            mDetailsText.setTextColor(Color.WHITE);
             mDetailsText.setText(detail);
             mLinearLayout.addView(mDetailsText);
         }
     }
 }
+
