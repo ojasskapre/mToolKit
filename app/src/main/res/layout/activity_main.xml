@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#212121"
+    tools:context=".MainActivity">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:id="@+id/my_wifi"
+        android:text="@string/my_wifi"
+        android:textSize="18sp"
+        android:drawableStart="@drawable/bottom_left"
+        android:background="#303030"
+        android:textColor="#FFFFFF"
+        tools:ignore="ButtonStyle" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:id="@+id/networks"
+        android:textSize="18sp"
+        android:background="#303030"
+        android:textColor="#FFFFFF"
+        android:text="@string/networks"
+        tools:ignore="ButtonStyle" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:id="@+id/saved_wifi"
+        android:textSize="18sp"
+        android:background="#303030"
+        android:textColor="#FFFFFF"
+        android:text="@string/saved_wifi"
+        tools:ignore="ButtonStyle" />
+
+</LinearLayout>
