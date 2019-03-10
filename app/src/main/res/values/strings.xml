@@ -3,4 +3,7 @@
     <string name="my_wifi">MY WIFI</string>
     <string name="networks">NETWORKS</string>
     <string name="saved_wifi">SAVED WIFI</string>
+    <string name="share">SHARE</string>
+    <string name="refresh">REFRESH</string>
+    <string name="nearby_networks">Nearby Networks</string>
 </resources>

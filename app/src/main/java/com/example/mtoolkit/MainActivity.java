@@ -27,5 +27,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        mNetworks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, AllWifiActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

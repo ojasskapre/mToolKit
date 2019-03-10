@@ -32,17 +32,24 @@ public class MyWifiActivity extends AppCompatActivity {
         getMyWifiDetails();
     }
 
-    @SuppressLint("HardwareIds")
+    @SuppressLint({"HardwareIds", "SetTextI18n"})
     private void getMyWifiDetails() {
         mWifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         mWifiInfo = mWifiManager.getConnectionInfo();
 
         mMyWifiNameText = findViewById(R.id.my_wifi_name);
-        mMyWifiNameText.setText(mWifiInfo.getSSID().toUpperCase());
+        String wifiName = mWifiInfo.getSSID();
+        wifiName = wifiName.substring(1, wifiName.length() - 1);
+
+        mMyWifiNameText.setText("Connected to :\t" + wifiName.toUpperCase());
 
         StringBuilder detail = new StringBuilder();
-        detail.append("\nSSID:\t").append(mWifiInfo.getSSID());
-        detail.append("\nBSSID:\t").append(mWifiInfo.getBSSID().toUpperCase());
+        detail.append("\nSSID:\t").append(wifiName);
+        if (mWifiInfo.getBSSID() == null) {
+            detail.append("\nBSSID:\t").append(mWifiInfo.getBSSID());
+        }else {
+            detail.append("\nBSSID:\t").append(mWifiInfo.getBSSID().toUpperCase());
+        }
 
         int ip = mWifiInfo.getIpAddress();
         String result = convertIPformat(ip);
@@ -51,8 +58,8 @@ public class MyWifiActivity extends AppCompatActivity {
         detail.append("\nMAC ADDRESS:\t").append(mWifiInfo.getMacAddress().toUpperCase());
         detail.append("\nLINK SPEED:\t").append(mWifiInfo.getLinkSpeed());
         detail.append("\nFREQUENCY:\t").append(mWifiInfo.getFrequency());
-        int level = WifiManager.calculateSignalLevel(mWifiInfo.getRssi(), 100);
-        detail.append("\nSIGNAL STRENGTH:\t").append(level).append("\n");
+        int level = WifiManager.calculateSignalLevel(mWifiInfo.getRssi(), 5);
+        detail.append("\nSIGNAL STRENGTH:\t").append(level * 20).append("\n");
 
 
         mMyWifiDetailsText = findViewById(R.id.my_wifi_details);
