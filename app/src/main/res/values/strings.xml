@@ -7,4 +7,6 @@
     <string name="refresh">REFRESH</string>
     <string name="nearby_networks">Nearby Networks</string>
     <string name="saved_networks">Saved Networks</string>
+    <string name="save">SAVE</string>
+    <string name="copy">COPY</string>
 </resources>

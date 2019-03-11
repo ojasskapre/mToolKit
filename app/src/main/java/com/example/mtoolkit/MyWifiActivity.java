@@ -1,22 +1,30 @@
 package com.example.mtoolkit;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import java.io.File;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class MyWifiActivity extends AppCompatActivity {
     WifiManager mWifiManager;
@@ -24,11 +32,91 @@ public class MyWifiActivity extends AppCompatActivity {
     TextView mMyWifiDetailsText;
     TextView mMyWifiNameText;
     TextView mMyWifiDHCPText;
+    Button mRefreshButton;
+    Button mSaveButton;
+    Button mCopyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_wifi);
+        mRefreshButton = findViewById(R.id.refresh);
+        mSaveButton = findViewById(R.id.save);
+        mCopyButton = findViewById(R.id.copy);
+
+        getDetails();
+
+        mRefreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDetails();
+            }
+        });
+
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nearby_network_details;
+                Date currentTime = Calendar.getInstance().getTime();
+                nearby_network_details = currentTime.toString();
+
+                mMyWifiNameText = findViewById(R.id.my_wifi_name);
+                nearby_network_details += "\n\n" + mMyWifiNameText.getText().toString();
+
+                mMyWifiDetailsText = findViewById(R.id.my_wifi_details);
+                nearby_network_details += "\n\nWIFI DETAILS:\n" + mMyWifiDetailsText.getText().toString();
+
+                mMyWifiDHCPText = findViewById(R.id.my_wifi_dhcp_details);
+                nearby_network_details += "\n\nDHCP INFORMATION:\n" + mMyWifiDHCPText.getText().toString();
+
+                File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "mToolKit");
+                dir.mkdirs();
+                try {
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yy::hh:mm-a");
+                    String formattedDate = df.format(currentTime);
+                    String filename = "MyWifi-" + formattedDate + ".txt";
+                    Log.d("dsfsgfdsfjkkj", filename);
+                    File myFile = new File(dir, filename);
+                    PrintWriter pw = new PrintWriter(myFile);
+                    pw.print(nearby_network_details);
+                    Toast.makeText(MyWifiActivity.this, "File Saved!!!", Toast.LENGTH_SHORT).show();
+                    pw.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mCopyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCopyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        String my_network_details;
+                        Date currentTime = Calendar.getInstance().getTime();
+                        my_network_details = currentTime.toString();
+
+                        mMyWifiNameText = findViewById(R.id.my_wifi_name);
+                        my_network_details += "\n\n" + mMyWifiNameText.getText().toString();
+
+                        mMyWifiDetailsText = findViewById(R.id.my_wifi_details);
+                        my_network_details += "\n\nWIFI DETAILS:\n" + mMyWifiDetailsText.getText().toString();
+
+                        mMyWifiDHCPText = findViewById(R.id.my_wifi_dhcp_details);
+                        my_network_details += "\n\nDHCP INFORMATION:\n" + mMyWifiDHCPText.getText().toString();
+
+                        ClipData clipData = ClipData.newPlainText("My WIFI", my_network_details);
+                        clipboardManager.setPrimaryClip(clipData);
+                        Toast.makeText(MyWifiActivity.this, "Copied!!!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void getDetails() {
         if (getNetworkClass(getApplicationContext()).equals("WIFI")) {
             getMyWifiDetails();
         }else if(getNetworkClass(getApplicationContext()).equals("-")) {
@@ -87,7 +175,7 @@ public class MyWifiActivity extends AppCompatActivity {
         detail.append("\nLINK SPEED:\t").append(mWifiInfo.getLinkSpeed());
         detail.append("\nFREQUENCY:\t").append(mWifiInfo.getFrequency());
         int level = WifiManager.calculateSignalLevel(mWifiInfo.getRssi(), 100);
-        detail.append("\nSIGNAL STRENGTH:\t").append(level).append(" %   (").append(mWifiInfo.getRssi()).append(" dBm )\n");
+        detail.append("\nSIGNAL STRENGTH:\t").append(level + 1).append(" %   (").append(mWifiInfo.getRssi()).append(" dBm )\n");
 
 
         mMyWifiDetailsText = findViewById(R.id.my_wifi_details);

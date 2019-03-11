@@ -2,8 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="#000000">
+    android:background="#212121">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,8 +18,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/nearby_networks"
+                android:id="@+id/nearbyNetworks"
                 android:gravity="center"
-                android:background="#212121"
+                android:background="#303030"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:layout_margin="10dp"
@@ -28,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text=""
                 android:id="@+id/number_wifi"
-                android:background="#212121"
+                android:background="#303030"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:layout_margin="10dp"

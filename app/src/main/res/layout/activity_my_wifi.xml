@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#000000">
+    android:background="#212121">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
                 android:text=""
                 android:gravity="center"
                 android:id="@+id/my_wifi_name"
-                android:background="#212121"
+                android:background="#303030"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:layout_margin="10dp"
@@ -32,11 +32,11 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.3"
                     android:layout_margin="10dp"
                     android:layout_gravity="start"
-                    android:id="@+id/share"
-                    android:text="@string/share"
+                    android:id="@+id/save"
+                    android:text="@string/save"
                     android:textSize="18sp"
                     android:drawableStart="@drawable/bottom_left"
                     android:background="#424242"
@@ -46,7 +46,21 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.3"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="start"
+                    android:id="@+id/copy"
+                    android:text="@string/copy"
+                    android:textSize="18sp"
+                    android:drawableStart="@drawable/bottom_left"
+                    android:background="#424242"
+                    android:textColor="#FFFFFF"
+                    tools:ignore="ButtonStyle" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
                     android:layout_margin="10dp"
                     android:layout_gravity="end"
                     android:id="@+id/refresh"
@@ -63,7 +77,7 @@
                 android:id="@+id/my_wifi_details"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="#212121"
+                android:background="#303030"
                 android:textColor="#FFFFFF"
                 android:text=""
                 android:textSize="16sp"
@@ -73,7 +87,7 @@
                 android:id="@+id/my_wifi_dhcp_details"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="#212121"
+                android:background="#303030"
                 android:textColor="#FFFFFF"
                 android:text=""
                 android:textSize="16sp"

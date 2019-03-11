@@ -37,8 +37,15 @@ public class SavedWifiActivity extends AppCompatActivity {
             detail.append("\n");
             detail.append("NETWORK ID:\t").append(mScanResultList.get(itr).networkId).append("\n");
             detail.append("SSID:\t").append(mScanResultList.get(itr).SSID).append("\n");
-            detail.append("Allowed Protocols:\t").append(mScanResultList.get(itr).allowedProtocols).append("\n");
-            detail.append("STATUS:\t").append(mScanResultList.get(itr).status).append("\n");
+            int status = mScanResultList.get(itr).status;
+            if (status == 0){
+                detail.append("STATUS:\t").append("CURRENT").append("\n");
+            }else if (status == 1) {
+                detail.append("STATUS:\t").append("DISABLED").append("\n");
+            }else if (status == 2) {
+                detail.append("STATUS:\t").append("ENABLED").append("\n");
+            }
+
 
             TextView mDetailsText = new TextView(getApplicationContext());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -46,7 +53,7 @@ public class SavedWifiActivity extends AppCompatActivity {
             mDetailsText.setLayoutParams(params);
             mDetailsText.setTextSize(16);
             mDetailsText.setPadding(20, 0, 0, 0);
-            mDetailsText.setBackgroundResource(R.color.coloTextView);
+            mDetailsText.setBackgroundResource(R.color.colorTextView);
             mDetailsText.setTextColor(Color.WHITE);
             mDetailsText.setText(detail);
             mLinearLayout.addView(mDetailsText);

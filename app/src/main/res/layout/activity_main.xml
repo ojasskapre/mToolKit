@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#000000"
+    android:background="#212121"
     tools:context=".MainActivity">
 
     <Button
@@ -15,7 +15,7 @@
         android:text="@string/my_wifi"
         android:textSize="18sp"
         android:drawableStart="@drawable/bottom_left"
-        android:background="#212121"
+        android:background="#303030"
         android:textColor="#FFFFFF"
         tools:ignore="ButtonStyle" />
 
@@ -25,7 +25,8 @@
         android:layout_margin="20dp"
         android:id="@+id/networks"
         android:textSize="18sp"
-        android:background="#212121"
+        android:drawableStart="@drawable/bottom_left"
+        android:background="#303030"
         android:textColor="#FFFFFF"
         android:text="@string/networks"
         tools:ignore="ButtonStyle" />
@@ -36,7 +37,8 @@
         android:layout_margin="20dp"
         android:id="@+id/saved_wifi"
         android:textSize="18sp"
-        android:background="#212121"
+        android:drawableStart="@drawable/bottom_left"
+        android:background="#303030"
         android:textColor="#FFFFFF"
         android:text="@string/saved_wifi"
         tools:ignore="ButtonStyle" />
