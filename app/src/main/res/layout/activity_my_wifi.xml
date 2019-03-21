@@ -72,6 +72,11 @@
                     tools:ignore="ButtonStyle" />
             </LinearLayout>
 
+            <com.github.mikephil.charting.charts.LineChart
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:id="@+id/lineChart"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:id="@+id/my_wifi_details"

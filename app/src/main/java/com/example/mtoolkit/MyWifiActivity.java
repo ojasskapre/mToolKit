@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -19,9 +21,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,12 +40,13 @@ import java.util.Date;
 public class MyWifiActivity extends AppCompatActivity {
     WifiManager mWifiManager;
     WifiInfo mWifiInfo;
-    TextView mMyWifiDetailsText;
-    TextView mMyWifiNameText;
-    TextView mMyWifiDHCPText;
-    Button mRefreshButton;
-    Button mSaveButton;
-    Button mCopyButton;
+    TextView mMyWifiDetailsText, mMyWifiNameText, mMyWifiDHCPText;
+    Button mRefreshButton, mSaveButton, mCopyButton;
+    LineChart mLineChart;
+    ArrayList<Entry> dataVals;
+    LineDataSet lineDataSet;
+    ArrayList<ILineDataSet> dataSets;
+    int time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +55,20 @@ public class MyWifiActivity extends AppCompatActivity {
         mRefreshButton = findViewById(R.id.refresh);
         mSaveButton = findViewById(R.id.save);
         mCopyButton = findViewById(R.id.copy);
+        mLineChart = findViewById(R.id.lineChart);
+        dataVals = new ArrayList<Entry>();
+        time = 0;
 
         getDetails();
+        final Handler handler1 = new Handler();
+        final Runnable r1 = new Runnable() {
+            @Override
+            public void run() {
+                getDetails();
+                handler1.postDelayed(this, 5000);
+            }
+        };
+        handler1.postDelayed(r1, 5000);
 
         mRefreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +204,47 @@ public class MyWifiActivity extends AppCompatActivity {
 
         mMyWifiDetailsText = findViewById(R.id.my_wifi_details);
         mMyWifiDetailsText.setText(detail);
+
+        // adding data to graph
+        dataVals.add(new Entry(time, mWifiInfo.getRssi()));
+        time += 5;
+        lineDataSet = new LineDataSet(dataVals, "Wifi RSSI level");
+        lineDataSet.setColor(Color.RED);
+        dataSets = new ArrayList<>();
+        dataSets.add(lineDataSet);
+        LineData data = new LineData(dataSets);
+        mLineChart.setData(data);
+        mLineChart.getXAxis().setTextColor(Color.WHITE);
+        mLineChart.getXAxis().setAxisLineColor(Color.WHITE);
+        mLineChart.getAxisLeft().setAxisLineColor(Color.WHITE);
+        mLineChart.getAxisLeft().setTextColor(Color.WHITE);
+        mLineChart.getAxisRight().setAxisLineColor(Color.WHITE);
+        mLineChart.getAxisRight().setTextColor(Color.WHITE);
+        mLineChart.getLegend().setTextColor(Color.WHITE);
+        mLineChart.invalidate();
+
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "mToolKit");
+        dir.mkdirs();
+        try {
+            Date currentTime = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yy::hh:mm:ss-a");
+            String formattedDate = df.format(currentTime);
+            File myFile = new File(dir, "SignalStrengthLogs.txt");
+            if (myFile.length() < 102400) {
+                FileWriter fw = new FileWriter(myFile, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter pw = new PrintWriter(bw);
+                String printString = mWifiInfo.getSSID() + "\t\t" + mWifiInfo.getRssi() + "\t\t" + formattedDate + "\n";
+                pw.print(printString);
+                pw.close();
+            }else{
+                PrintWriter pw = new PrintWriter(myFile);
+                pw.print("");
+                pw.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         DhcpInfo info = mWifiManager.getDhcpInfo();
 
